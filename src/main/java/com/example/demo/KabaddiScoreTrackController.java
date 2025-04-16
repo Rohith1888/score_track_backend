@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Kabaddi Upcoming Matches", description = "APIs to manage upcoming kabaddi matches")
 @RestController
 @RequestMapping("/upcoming/kabaddi")
 @CrossOrigin

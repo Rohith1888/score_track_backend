@@ -8,17 +8,21 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/user")
 @CrossOrigin
+@Tag(name = "User", description = "User authentication and registration APIs")
 public class UserController {
 
     @Autowired
     private UserDAO userDAO;
 
+    @Operation(summary = "Register a new user")
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-    	System.out.println(userDAO.existsByEmail(user.getEmail()));
         if (userDAO.existsByEmail(user.getEmail())) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -28,6 +32,7 @@ public class UserController {
         return ResponseEntity.ok(savedUser);
     }
 
+    @Operation(summary = "User login")
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody Map<String, String> credentials) {
         String email = credentials.get("email");
