@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,4 +49,40 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }
+
+    @Operation(summary = "Update user's name or password")
+    @PutMapping("/update")
+    public ResponseEntity<?> updateUser(@RequestParam String email,
+                                        @RequestParam(required = false) String newName,
+                                        @RequestParam(required = false) String newPassword) {
+
+        if ((newName == null || newName.isEmpty()) && (newPassword == null || newPassword.isEmpty())) {
+            return ResponseEntity.badRequest().body("Error: No fields to update.");
+        }
+
+        User updatedUser = userDAO.updateUser(email, newName, newPassword);
+        if (updatedUser != null) {
+            return ResponseEntity.ok(updatedUser);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+    }
+    @Operation(summary = "Delete a user")
+    @DeleteMapping("/delete")
+    public ResponseEntity<?> deleteUser(@RequestParam String email) {
+        boolean deleted = userDAO.deleteUser(email);
+        if (deleted) {
+            return ResponseEntity.ok("User deleted successfully.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found.");
+        }
+    }
+    @Operation(summary = "Get all users")
+    @GetMapping("/all")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userDAO.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
 }
+

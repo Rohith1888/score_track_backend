@@ -40,5 +40,11 @@ public class ScoreTrackController {
             .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
-    
+    // ✅ PUT endpoint to update a match by ID
+    @PutMapping("/match/{id}")
+    public ResponseEntity<Cricket_UpComing> updateMatch(@PathVariable int id, @RequestBody Cricket_UpComing updatedMatch) {
+        return cricketUpcomingDAO.updateMatch(id, updatedMatch)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+    }
 }
